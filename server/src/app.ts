@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(clerkMiddleware());
+
 app.get('/test',async(req,res)=>{
   const { userId } = getAuth(req)
   if(!userId)
