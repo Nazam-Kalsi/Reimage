@@ -4,7 +4,7 @@ import { ThemeToggler } from './components/customComponents'
 function App() {
   return (
     <>
-    <ThemeToggler/>
+    <ThemeToggler className='absolute top-5 left-5'/>
       <Outlet/>
     </>
   )
