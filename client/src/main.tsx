@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { About, Home, SignIn } from "./pages";
+import { About, Home, OTPverification, SignIn, SignUp } from "./pages";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
 
@@ -20,6 +20,8 @@ const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: "/about", Component: About },
       { path: "/sign-in", Component: SignIn },
+      { path: "/sign-up", Component: SignUp },
+      { path: "/verify", Component: OTPverification },
     ],
   },
 ]);

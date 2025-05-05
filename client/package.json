@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "input-otp": "^1.4.2",
     "lucide-react": "^0.507.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

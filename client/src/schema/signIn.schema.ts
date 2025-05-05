@@ -1,5 +1,5 @@
-import { string, z } from "zod";
+import { z } from "zod";
 export const signInSchema = z.object({
-    identity:string().min(3,{message:"Can be of atleast 3 character long."}),
-    password:string().min(4,{message:"Can be of atleast 4 character long."}),
+    identity: z.string().min(3, { message: "Can be of at least 3 characters long." }),
+    password:z.string().min(4,{message:"Can be of atleast 4 character long."}),
 })

@@ -10,8 +10,8 @@ type Props = {
 const Input = forwardRef<HTMLInputElement, Props>(
   ({ type = "text", placeHolder, className = "", label, error, ...props }, ref) => {
     return (
-      <>
-        <label htmlFor={label} className="w-full block mb-1 font-medium">
+      <div className=" relative mb-1">
+        <label htmlFor={label} className="w-full">
           {label}
         </label>
         <input
@@ -19,11 +19,11 @@ const Input = forwardRef<HTMLInputElement, Props>(
           ref={ref}
           type={type}
           placeholder={placeHolder}
-          className={`${className} w-full border p-2 rounded-lg ${error ? 'border-red-500' : ''}`}
+          className={`${className} w-full border p-2 py-1 rounded-md ${error ? 'border-red-500' : ''}`}
           {...props}
         />
-        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-      </>
+        {error && <p className="absolute text-red-500 text-xs mt-1">{error}</p>}
+      </div>
     );
   }
 );
