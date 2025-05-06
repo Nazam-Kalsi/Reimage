@@ -5,17 +5,18 @@ import Input from "@/components/customComponents/input";
 import { useForm } from "react-hook-form";
 import { LucideEye, LucideEyeOff } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { signInSchema } from "@/schema/signIn.schema";
-import { useSignUp } from '@clerk/clerk-react'
-import { ClerkAPIError } from '@clerk/types'
-import { isClerkAPIResponseError } from '@clerk/clerk-react/errors'
+import { Loading } from "@/components/customComponents";
+import { useSignIn } from '@clerk/clerk-react'
 
 export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const { isLoaded, signUp, setActive } = useSignUp()
+  const [loading, setLoading] = useState<boolean>(false);
+  const { isLoaded, signIn, setActive } = useSignIn()
+  const navigate = useNavigate();
 
   const {
     register,
@@ -25,17 +26,39 @@ export default function SignIn() {
     resolver: zodResolver(signInSchema),
     defaultValues: {
       password: "",
-      identity: "",
+      identifier: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof signInSchema>) {
+  async function onSubmit(data: z.infer<typeof signInSchema>) {
+    console.log(data)
+  try{
+    setLoading(true);  
+      if (!isLoaded) return  
+      
+        const signInAttempt = await signIn.create({
+          identifier: data.identifier,
+          password:data.password,
+        })
+        console.log("signInAttempt :",signInAttempt)
   
-    console.log(values)
+        if (signInAttempt.status === 'complete') {
+          await setActive({ session: signInAttempt.createdSessionId })
+          navigate('/');
+        } else {
+          console.error(JSON.stringify(signInAttempt, null, 2))
+        }
+  }catch(err){
+    console.log("Error while sign-in :",err)
+  }finally{
+    setLoading(false)
+  }
   }
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+            {loading && <Loading/> }
+
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className={cn("flex flex-col gap-2")}>
           <Card className="overflow-hidden p-0">
@@ -52,8 +75,8 @@ export default function SignIn() {
                     <Input
                       type="text"
                       label="Email/Username"
-                      {...register("identity")}
-                      error={errors.identity?.message as string}
+                      {...register("identifier")}
+                      error={errors.identifier?.message as string}
                     />
                   </div>
                   <div className="">

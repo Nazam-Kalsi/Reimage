@@ -10,10 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
+import { useSignUp } from '@clerk/clerk-react'
+import { useNavigate } from "react-router";
+
 
 export default function OTPverification() {
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const navigate = useNavigate();
   const {
-    register,
     formState: { errors },
     handleSubmit,
     watch,
@@ -31,8 +35,29 @@ export default function OTPverification() {
     submit({code:watchedVal});
     },[watchedVal])
   
-  const submit = (data: z.infer<typeof OTPverifySchema>) => {
+
+
+  const submit = async(data: z.infer<typeof OTPverifySchema>) => {
     console.log("data : ", data);
+  
+      if (!isLoaded) return
+  
+      try {
+        // Use the code the user provided to attempt verification
+        const signUpAttempt = await signUp.attemptEmailAddressVerification({
+          code: data.code,
+        })
+        if (signUpAttempt.status === 'complete') {
+          await setActive({ session: signUpAttempt.createdSessionId })
+          navigate('/')
+        } else {
+          console.error(JSON.stringify(signUpAttempt, null, 2))
+        }
+      } catch (err) {
+        console.error('Error:', JSON.stringify(err, null, 2))
+      }
+    
+
   };
 
   return (

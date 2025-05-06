@@ -1,40 +1,44 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/customComponents";
+import { Input, Loading } from "@/components/customComponents";
 import { Link } from "react-router";
-import { GalleryVerticalEnd } from "lucide-react";
+import {  GalleryVerticalEnd } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signUpSchema } from "@/schema/signUp.schema";
 import { useSignUp } from '@clerk/clerk-react'
-import { ClerkAPIError } from '@clerk/types'
-import { isClerkAPIResponseError } from '@clerk/clerk-react/errors'
+import { useNavigate } from "react-router";
+import { useState } from "react";
 
 export default function SignUp() {
-  const { isLoaded, signUp, setActive } = useSignUp();
-
+  const { isLoaded, signUp } = useSignUp();
+  const [loading, setLoading] = useState<boolean>(false);
+const navigate = useNavigate();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<z.infer<typeof signUpSchema>>({
     defaultValues: {
-      userName: "",
-      email: "",
-      password: "",
+      username: "nazamkalsi",
+      email: "nazamkalsi69@gmail.com",
+      password: "nnzzmmnnzzmm",
     },
     resolver: zodResolver(signUpSchema),
   });
 
   const submit = async(data: z.infer<typeof signUpSchema>) => {
+    console.log(data);
     try {
+      setLoading(true);
       console.log(data);
      if (!isLoaded) return;
 
      const creatingUser = await signUp.create({
       emailAddress:data.email,
       password:data.password,
+      username:data.username,
     })
 
     if(!creatingUser){
@@ -49,13 +53,18 @@ export default function SignUp() {
       console.log("Verification Code error");return;      
     }
     console.log("verifiationCode : ",verifiationCode)
+    navigate('/verify')
       
     } catch (error) {
       console.log("error occur (catch block): ",error)
+    }finally{
+      setLoading(false);
     }
   };
 
   return (
+    <>
+      {loading && <Loading/> }
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="relative hidden bg-muted lg:block">
         <img
@@ -85,12 +94,12 @@ export default function SignUp() {
                   Enter your details below to sign up
                 </p>
               </div>
-              <div className="flex flex-col gap-2">
-                <div>
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-4">
                   <Input
                     label="Username"
-                    {...register("userName")}
-                    error={errors.userName?.message as string}
+                    {...register("username")}
+                    error={errors.username?.message as string}
                   />
                   <Input
                     label="Email"
@@ -132,5 +141,6 @@ export default function SignUp() {
         </div>
       </div>
     </div>
+    </>
   );
 }
