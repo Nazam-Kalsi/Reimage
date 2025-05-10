@@ -33,6 +33,9 @@ import userRouter from "./routes/user.route";
 import { ApiRes } from "./utils/apiRes";
 app.use(userRouter);
 
+import uploadRouter from "./routes/upload.route";
+app.use(uploadRouter);
+
 
 import { errorHandler } from "./middleware/error.middleware";
 app.use(errorHandler);
