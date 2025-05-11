@@ -36,6 +36,8 @@ app.use(userRouter);
 import uploadRouter from "./routes/upload.route";
 app.use(uploadRouter);
 
+// app.use("/api/upload" ,uploadRouter);
+
 
 import { errorHandler } from "./middleware/error.middleware";
 app.use(errorHandler);

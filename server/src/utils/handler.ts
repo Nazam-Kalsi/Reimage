@@ -10,8 +10,13 @@ export const handler = (fn: AsyncHandler) => {
         try {
             await fn(req, res, next);
         } catch (error) {
-            console.error("Error occurred in handler:", error);
-            next(new ApiErr(500, "Internal server error")); 
+            if (error instanceof Error) {
+                console.error("Error occurred in handler:", error);
+                next(new ApiErr(500, `Internal server error, ${error.message}`));
+              } else {
+                console.error("Unknown error occurred in handler:", error);
+                next(new ApiErr(500, "Internal server error"));
+              }
         }
     };
 };

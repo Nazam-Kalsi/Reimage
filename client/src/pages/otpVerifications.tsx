@@ -65,8 +65,8 @@ export default function OTPverification() {
       <Controller
         name="code"
         control={control}
-        rules={{ validate: (value) => value.length === 6 }}
-        render={({ field }) => {
+        rules={{ validate: (value:string) => value.length === 6 }}
+        render={({ field }:{field:any}) => {
           return (
             <form onSubmit={handleSubmit(submit)} {...field}>
               <InputOTP maxLength={6} >
