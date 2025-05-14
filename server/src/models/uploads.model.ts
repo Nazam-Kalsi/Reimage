@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import { logsMiddleware } from "../middleware/logs.middleware";
 
 const uploadsSchema = new Schema(
   {
@@ -28,4 +29,6 @@ const uploadsSchema = new Schema(
   { timestamps: true }
 );
 
+logsMiddleware(uploadsSchema, "Uploads");
 export const Uploads = model("Uploads", uploadsSchema);
+

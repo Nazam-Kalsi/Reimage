@@ -6,7 +6,7 @@ import { authVerification } from "../middleware/auth.middleware";
 const router = Router();
 
 
-router.route('/upload-image').post(upload.single('image'), uploadImage);
-router.route('/upload-video').post(upload.single('video'), uploadVideo);
+router.route('/upload-image').post(upload.single('image'), authVerification, uploadImage);
+router.route('/upload-video').post(upload.single('video'), authVerification, uploadVideo);
 
 export default router;

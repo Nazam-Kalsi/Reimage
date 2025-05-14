@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Uploads } from "../models/uploads.model";
 import { ApiErr } from "../utils/apiErr"
 import { ApiRes } from "../utils/apiRes"
@@ -19,12 +20,14 @@ export const uploadImage = handler(async (req, res, next)=>{
         return next(new ApiErr(500, "Error uploading to cloudinary"));
     }
 
-    const newFile = await Uploads.create({
+    const newFile = new Uploads({
         title,
         description,
         fileURL: uploadingToCloudinary.secure_url,
         type:"image"
     })
+
+    await newFile.save({editor:req.user._id} as any);
 
     if(!newFile){
         return next(new ApiErr(400,"Error while creating new record"));
@@ -48,12 +51,14 @@ export const uploadVideo = handler(async (req, res, next)=>{
         return next(new ApiErr(500, "Error uploading to cloudinary"));
     }
 
-    const newFile = await Uploads.create({
+    const newFile = new Uploads({
         title,
         description,
         fileURL: uploadingToCloudinary.secure_url,
         type:"video"
-    })
+    });
+
+    await newFile.save({editor:req.user._id} as any);
 
     if(!newFile){
         return next(new ApiErr(400,"Error while creating new record"));
