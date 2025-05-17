@@ -34,7 +34,7 @@ import { ApiRes } from "./utils/apiRes";
 app.use(userRouter);
 
 import uploadRouter from "./routes/upload.route";
-app.use(uploadRouter);
+app.use("/api/upload",uploadRouter);
 
 // app.use("/api/upload" ,uploadRouter);
 

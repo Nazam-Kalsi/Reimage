@@ -13,6 +13,7 @@ export const handler = (fn: AsyncHandler) => {
             if (error instanceof Error) {
                 console.error("Error occurred in handler:", error);
                 next(new ApiErr(500, `Internal server error, ${error.message}`));
+                return;
               } else {
                 console.error("Unknown error occurred in handler:", error);
                 next(new ApiErr(500, "Internal server error"));

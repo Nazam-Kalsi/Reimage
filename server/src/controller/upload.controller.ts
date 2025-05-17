@@ -33,7 +33,7 @@ export const uploadImage = handler(async (req, res, next)=>{
         return next(new ApiErr(400,"Error while creating new record"));
     }
 
-    return res.status(200).json("yeat");
+    return res.status(200).json(ApiRes(200, "File uploaded successfully", newFile));
 }) 
 
 export const uploadVideo = handler(async (req, res, next)=>{
