@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
           className={`${className} w-full border p-2 py-1 rounded-md ${error ? 'border-red-500' : ''}`}
           {...props}
         />
-        {error && <p className="absolute text-red-500 text-xs mt-1">{error}</p>}
+        {error && <p className=" text-red-500 text-xs mt-1">{error}</p>}
       </div>
     );
   }
