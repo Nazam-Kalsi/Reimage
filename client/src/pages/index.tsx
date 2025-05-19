@@ -1,9 +1,12 @@
 import Home from "./home";
-import About from "./about";
-import SignIn from "./signIn";
-import SignUp from "./signUp";
-import OTPverification from "./otpVerifications";
+import SignIn from "./auth/signIn";
+import SignUp from "./auth/signUp";
+import OTPverification from "./auth/otpVerifications";
+import ImageUpload from "./dashboard/imageUpload";
+import DashboardContainer from "./dashboard";
+import ViewAll from "./dashboard/viewAll";
+import VideoUpload from "./dashboard/videoUpload";
 
 export {
-    Home, About, SignIn, SignUp, OTPverification
+    Home, SignIn, SignUp, OTPverification,ImageUpload,DashboardContainer,ViewAll,VideoUpload
 }
