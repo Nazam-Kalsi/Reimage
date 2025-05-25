@@ -4,20 +4,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import Input from "@/components/customComponents/input";
 import { useForm } from "react-hook-form";
 import { LucideEye, LucideEyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { signInSchema } from "@/schema/signIn.schema";
 import { Loading } from "@/components/customComponents";
 import { useSignIn } from '@clerk/clerk-react'
+import { useAppSelector } from "@/store/store";
 
 export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { isLoaded, signIn, setActive } = useSignIn()
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.userSlice.user);
 
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+  
   const {
     register,
     formState: { errors },

@@ -31,13 +31,13 @@ app.get("/test", authVerification, async (req:ReqWithUser, res:Response) => {
 
 import userRouter from "./routes/user.route";
 import { ApiRes } from "./utils/apiRes";
-app.use(userRouter);
+app.use("/api/auth",userRouter);
 
 import uploadRouter from "./routes/upload.route";
 app.use("/api/upload",uploadRouter);
 
-// app.use("/api/upload" ,uploadRouter);
-
+import imageTransformationRouter from "./routes/fileModify.route";
+app.use("/api/modify", imageTransformationRouter);
 
 import { errorHandler } from "./middleware/error.middleware";
 app.use(errorHandler);

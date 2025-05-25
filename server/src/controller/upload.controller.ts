@@ -33,7 +33,7 @@ export const uploadImage = handler(async (req, res, next)=>{
         return next(new ApiErr(400,"Error while creating new record"));
     }
 
-    return res.status(200).json(ApiRes(200, "File uploaded successfully", newFile));
+    return res.status(200).json(ApiRes(200, "File uploaded successfully", {localUpload:newFile,cloudinaryUpload:uploadingToCloudinary}));
 }) 
 
 export const uploadVideo = handler(async (req, res, next)=>{

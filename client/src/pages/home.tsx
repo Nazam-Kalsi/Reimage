@@ -24,18 +24,18 @@ function Home({}: Props) {
     <>
     
     <div>
-      <header>
+      {/* <header>
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
           <UserButton />
         </SignedIn>
-      </header> 
+      </header>  */}
     </div>
-    <Link to='/image-upload'>
+    <Link to='/sign-in'>
     <Button>
-    Upload Image
+    sign in
     </Button>
     </Link>
     </>

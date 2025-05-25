@@ -4,7 +4,7 @@ type Props = {}
 
 function ViewAll({}: Props) {
   return (
-    <div>ViewAllwertyuioikjhg</div>
+    <div className=''>ViewAllwertyuioikjhg</div>
   )
 }
 

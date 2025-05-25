@@ -16,13 +16,15 @@ import {
 import { ClerkProvider } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
 import { Provider } from "react-redux";
-import {store} from "./store/store.ts";
+import { store } from "./store/store.ts";
+import { PrivateRoute } from "./components/customComponents";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +37,11 @@ const router = createBrowserRouter([
       // { path: "/image-upload", Component: ImageUpload },
       {
         path: "dashboard",
-        Component: DashboardContainer,
+        element: (
+          <PrivateRoute>
+            <DashboardContainer />
+          </PrivateRoute>
+        ),
         children: [
           { index: true, Component: ViewAll },
           { path: "upload-image", Component: ImageUpload },
@@ -52,8 +58,9 @@ createRoot(document.getElementById("root")!).render(
       <ClerkProvider
         publishableKey={PUBLISHABLE_KEY}
         afterSignOutUrl="/"
-        appearance={{ baseTheme: dark }}>
-         <RouterProvider router={router} />
+        appearance={{ baseTheme: dark }}
+      >
+        <RouterProvider router={router} />
       </ClerkProvider>
     </Provider>
   </StrictMode>

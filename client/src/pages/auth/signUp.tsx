@@ -9,12 +9,22 @@ import { z } from "zod";
 import { signUpSchema } from "@/schema/signUp.schema";
 import { useSignUp } from '@clerk/clerk-react'
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "@/store/store";
 
 export default function SignUp() {
   const { isLoaded, signUp } = useSignUp();
   const [loading, setLoading] = useState<boolean>(false);
 const navigate = useNavigate();
+
+  const user = useAppSelector((state) => state.userSlice.user);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
   const {
     register,
     formState: { errors },
