@@ -113,7 +113,7 @@ const filterData = {
     "daguerre",
     "eucalyptus",
     "fes",
-    "filterfrost",
+    "frost",
     "al_dente",
     "athena",
     "audrey",
@@ -173,10 +173,7 @@ function ImageUpload({}: Props) {
     },
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const [modifiedImage, setModifiedImage] = useState<
-    modifiedImageT | undefined
-  >(undefined);
-
+  const [modifiedImage, setModifiedImage] = useState<modifiedImageT | undefined>(undefined);
   const [format, setFormat] = useState<string>("");
 
   const {
@@ -258,28 +255,29 @@ function ImageUpload({}: Props) {
       }
       
       console.log(dataToSend);
-      // const res = await apiHandler("/modify/image-transformation", "post", {
-      //   data:dataToSend,
-      // });
+      const res = await apiHandler("/modify/image-transformation", "post", {
+        data:dataToSend,
+      });
 
-      // if (!res.success) {
-      //   console.log(res.message);
-      //   toast.error(res.message);
-      //   setLoading(false);
-      //   return;
-      // }
+      if (!res.success) {
+        console.log(res.message);
+        toast.error(res.message);
+        setLoading(false);
+        return;
+      }
 
-      // console.log(res);
-      // setModifiedImage((prev) => {
-      //   if(prev){
-      //     return { ...prev, url: res.res?.data.data };
-      //   }
-      // else{
-      //   return { height:0,width:0, url: res.res?.data.data };
-      // }
-      // });
-      // setLoading(false);
+      console.log(res);
+      setModifiedImage((prev) => {
+        if(prev){
+          return { ...prev, url: res.res?.data.data };
+        }
+      else{
+        return { height:0,width:0, url: res.res?.data.data };
+      }
+      });
+      setLoading(false);
   };
+  console.log(modifiedImage);
 
   // useEffect(() => {
   //   (async () => {
@@ -400,7 +398,7 @@ function ImageUpload({}: Props) {
                                   <SelectLabel>{title}</SelectLabel>
                                   {filter.map((item: string,index:number) => {
                                     return (
-                                      <SelectItem key={index} value={item}>
+                                      <SelectItem key={index} value={title=='art'?`art:${item}`:item}>
                                         {item}
                                       </SelectItem>
                                     );
@@ -461,7 +459,7 @@ function ImageUpload({}: Props) {
                 <img
                   src={modifiedImage.url}
                   className="max-w-full max-h-full object-contain "
-                  alt="img"
+                  alt="imgqq"
                 />
               </div>
             )}

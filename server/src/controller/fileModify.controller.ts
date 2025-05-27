@@ -7,15 +7,20 @@ import { cloudinaryConfig } from "../utils/cloudinaryUpload";
 
 export const imageTransformation = handler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { height, width, public_id } = req.body;
-    if (!height || !width || !public_id) 
-      return next(new ApiErr(400, "Height and width are required"));
-    console.log(req.body);
-
-    const modifiedImage = await cloudinary.v2.image(public_id, {transformation: [
-  { width,height },
-  {fetch_format: "auto"}
-  ]});
+    const { height, width, public_id, radius, filter } = req.body;
+    if(!public_id)
+      return next(new ApiErr(400, "public id is required."));
+    let transformation:any = [
+      {fetch_format: "auto"},
+      {quality: "auto"}
+      ]
+    if (height && width ) transformation.push({ width, height });    
+    if(filter) transformation.push({effect:filter});
+    if(radius) transformation.push({ radius});
+    console.log(transformation)
+    
+    const modifiedImage = await cloudinary.v2.image(public_id, {transformation});
+    console.log(modifiedImage);
 
   const match = modifiedImage.match(/src=['"]([^'"]+)['"]/);
   const imageUrl = match ? match[1] : "";
