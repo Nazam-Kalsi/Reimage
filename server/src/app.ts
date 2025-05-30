@@ -39,5 +39,8 @@ app.use("/api/upload",uploadRouter);
 import imageTransformationRouter from "./routes/fileModify.route";
 app.use("/api/modify", imageTransformationRouter);
 
+import dashBoardRouter from "./routes/dashboard.route";
+app.use("/api/dashboard", dashBoardRouter);
+
 import { errorHandler } from "./middleware/error.middleware";
 app.use(errorHandler);

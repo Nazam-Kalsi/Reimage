@@ -16,7 +16,9 @@ export const imageTransformation = handler(
       ]
     if (height && width ) transformation.push({ width, height });    
     if(filter) transformation.push({effect:filter});
-    if(radius) transformation.push({ radius});
+    if(radius) {
+      radius=='full'? transformation.push({ radius}):transformation.push({ radius:Number(radius)})
+    }
     console.log(transformation)
     
     const modifiedImage = await cloudinary.v2.image(public_id, {transformation});

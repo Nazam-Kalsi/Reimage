@@ -1,7 +1,7 @@
 import mongoose, {Schema, model} from "mongoose";
 
 const logsSchame = new Schema({
-    editor:String,
+    editor: mongoose.Schema.Types.Mixed,
     action:String,
     model: String,  
     doc: {

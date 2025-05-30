@@ -4,6 +4,8 @@ import { Log } from "../models/logs.model";
 export const logsMiddleware = (schema: Schema, model: string) => {
   schema.post("save", async function (doc) {
     const editor = (this as any).$__.saveOptions?.editor;
+
+    console.log("editorDoc : ",(this as any).$__.saveOptions);
     await Log.create({
       model,
       action: "Insert",

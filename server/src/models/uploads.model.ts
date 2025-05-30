@@ -29,6 +29,6 @@ const uploadsSchema = new Schema(
   { timestamps: true }
 );
 
-logsMiddleware(uploadsSchema, "Uploads");
-export const Uploads = model("Uploads", uploadsSchema);
+logsMiddleware(uploadsSchema, "Upload");
+export const Upload = model("Upload", uploadsSchema);
 

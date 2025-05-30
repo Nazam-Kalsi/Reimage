@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
-import { Uploads } from "../models/uploads.model";
+import { Upload } from "../models/uploads.model";
 import { ApiErr } from "../utils/apiErr"
 import { ApiRes } from "../utils/apiRes"
 import { cloudinaryUpload } from "../utils/cloudinaryUpload";
 import { handler } from "../utils/handler"
+
+interface SaveOptionsWithEditor extends mongoose.SaveOptions {
+  editor?: any;
+}
 
 export const uploadImage = handler(async (req, res, next)=>{
     const file = req.file;
@@ -20,14 +24,14 @@ export const uploadImage = handler(async (req, res, next)=>{
         return next(new ApiErr(500, "Error uploading to cloudinary"));
     }
 
-    const newFile = new Uploads({
+    const newFile = new Upload({
         title,
         description,
         fileURL: uploadingToCloudinary.secure_url,
         type:"image"
     })
 
-    await newFile.save({editor:req.user._id} as any);
+    await newFile.save({editor:req.user} as SaveOptionsWithEditor);
 
     if(!newFile){
         return next(new ApiErr(400,"Error while creating new record"));
@@ -51,7 +55,7 @@ export const uploadVideo = handler(async (req, res, next)=>{
         return next(new ApiErr(500, "Error uploading to cloudinary"));
     }
 
-    const newFile = new Uploads({
+    const newFile = new Upload({
         title,
         description,
         fileURL: uploadingToCloudinary.secure_url,
