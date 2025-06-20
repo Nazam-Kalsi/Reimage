@@ -17,7 +17,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         <input
           id={label}
           ref={ref}
-          type={type}
+          type={type}          
           placeholder={placeHolder}
           className={`${className} w-full border p-2 py-1 rounded-md ${error ? 'border-red-500' : ''}`}
           {...props}

@@ -49,6 +49,7 @@ export const uploadVideo = handler(async (req, res, next)=>{
     if(!title || !description){
         return next(new ApiErr(400, "Please provide title and description"));
     }    
+    console.log(file,title, description);
     const uploadingToCloudinary = await cloudinaryUpload(file.path, 'video');
     console.log("uploadingToCloudinary : ",uploadingToCloudinary);
     if(!uploadingToCloudinary){
@@ -67,6 +68,6 @@ export const uploadVideo = handler(async (req, res, next)=>{
     if(!newFile){
         return next(new ApiErr(400,"Error while creating new record"));
     }
+    return res.status(200).json(ApiRes(200, "File uploaded successfully", {localUpload:newFile,cloudinaryUpload:uploadingToCloudinary}));
 
-    return res.status(200).json("yeat");
 }) 

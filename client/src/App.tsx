@@ -14,9 +14,7 @@ function App() {
       const res = await apiHandler('/auth/current-user','get');
       if(!res.success) {
         dispatch(signIn(null));
-
         return;}
-      console.log(res);
       const dataToDispatch = {
         id:(res.res as any).data.data.id,
         userName: (res.res as any).data.data.username,

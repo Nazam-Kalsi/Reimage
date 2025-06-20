@@ -5,8 +5,13 @@ import { NextFunction, Request, Response } from "express";
 import { Upload } from "../models/uploads.model";
 
 export const getUploadedImages = handler(async(req,res,next)=>{    
-    const {page,limit} = req.query;
+    const {page,limit,type} = req.query;
     const imagesData = await Upload.aggregate([
+        {$match:{
+            type: type || "image",
+        }},
+        {$sort: {createdAt: -1
+        }},
         {$skip: (parseInt(page as string) - 1) * (parseInt(limit as string) || 10)},
         {$limit: parseInt(limit as string) || 10},
     ])

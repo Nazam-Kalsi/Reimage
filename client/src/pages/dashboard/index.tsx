@@ -98,7 +98,7 @@ function DashboardContainer({}: Props) {
               </SidebarMenu>
             </SidebarFooter>
           </Sidebar>
-          <main className="flex flex-col w-full">
+          <main className="relative flex flex-col w-full">
             <SidebarTrigger className="absolute top-4"/>
             <Outlet />
           </main>

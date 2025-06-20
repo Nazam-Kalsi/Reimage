@@ -8,8 +8,8 @@ type Props = {
 }
 
 function PrivateRoute({children}: Props) {
-    const user = useAppSelector((state) => state.userSlice.user);  
     const isLoading = useAppSelector((state) => state.userSlice.isLoading);  
+    const user = useAppSelector((state) => state.userSlice.user);  
     if (isLoading) {
         return <Loading/>
     }
