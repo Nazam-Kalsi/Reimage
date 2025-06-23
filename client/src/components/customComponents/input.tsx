@@ -5,7 +5,7 @@ type Props = {
   label: string;
   placeHolder?: string;
   className?: string;
-  error:string;
+  error?:string;
 }& InputHTMLAttributes<HTMLInputElement>;
 const Input = forwardRef<HTMLInputElement, Props>(
   ({ type = "text", placeHolder, className = "", label, error, ...props }, ref) => {

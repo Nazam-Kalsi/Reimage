@@ -30,3 +30,47 @@ export const imageTransformation = handler(
   res.status(200).json(ApiRes(200, "File modified successfully", imageUrl ));
 
   });
+
+  type videoTransformataT = {
+    publicId:string,
+    [key:string] : string | boolean | number,
+  }
+export const videoTransformation = handler(async (req,res,next)=>{
+  const data:videoTransformataT =req.body;
+  if(!data.publicId)return next(new ApiErr(400,"PLease provide Public ID of your video file"))
+  let transformation: { [key: string]: string | number | boolean }[] = [];
+
+        // height:null,
+        // width:null,
+        // backGround:null,
+        // startOffset:null,
+        // endOffset:null,
+        // boomarang:null,
+
+        
+        if(data.backGround) {
+          const background = (data.backGround as string).slice(1).toUpperCase(); 
+          transformation.push({ background:'chocolate' });}
+          
+          if(data.height) transformation.push({ height: Number(data.height) });
+          if(data.width) transformation.push({ width: Number(data.width) });
+          if((data.width || data.height)) transformation.push({ crop: "pad" });
+if(data.startOffset) transformation.push({ start_offset: data.startOffset });
+if(data.endOffset) transformation.push({ end_offset: data.endOffset });
+if(data.boomerang) transformation.push({ effect: 'boomerang' });
+
+
+
+console.log(transformation);
+
+const modifiedVideo = await cloudinary.v2.url(data.publicId,
+  {resource_type: "video",
+  transformation
+})
+
+console.log('modifiedVideo',modifiedVideo)
+
+return res.status(200).json(ApiRes(200,"Video modified successfully.",modifiedVideo));
+}  
+)
+

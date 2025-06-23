@@ -1,14 +1,16 @@
-import { Input } from '@/components/customComponents';
+import { Input, Loading } from '@/components/customComponents';
 import { Button } from '@/components/ui/button';
 import { apiHandler } from '@/lib/apiHandler';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-type Props = {}
-
-function VideoUpload({}: Props) {
-  const [videoData, setVideData]  =useState({
+type paramT = {
+  [key:string]:any
+}
+function VideoUpload() {
+  const [uploadedVideoData, setUploadedVideData]  =useState(
+    {
     "localUpload": {
         "title": "VideoTest",
         "description": "Ttest Description For video",
@@ -64,16 +66,37 @@ function VideoUpload({}: Props) {
         "nb_frames": 51,
         "api_key": "743384798964899"
     }
-});
+}
+);
+const [modifiedVideoData,setModifiedVideData] = useState<string | null>(null)
+
   const [loading,setLoading]= useState<boolean>(false)
   const {
     register:videoUploadRegister,
     handleSubmit:videoUploadHandleSubmit,
     formState: { errors: videoUploadErrors },
-    watch: videoUploadWatch,
   } = useForm();
 
-  const uploadVideo = async (data:any)=>{
+  const {
+    register:modificationRegister,
+    handleSubmit:modificationHandleSubmit,
+    formState: { errors: modificationErrors },
+    watch: modificationWatch,
+  } = useForm({
+      defaultValues:{
+        height:null,
+        width:null,
+        backGround:null,
+        startOffset:null,
+        endOffset:null,
+        boomerang:null,
+        effect:null
+      }
+    }
+  )
+
+
+  const uploadVideo = async (data:paramT)=>{
     const formData = new FormData();
     formData.append('video', data.file[0]);
     formData.append('title', data.title);
@@ -90,12 +113,31 @@ function VideoUpload({}: Props) {
     }
     console.log(res);
     if (!res.res) return;
-    setVideData(res.res.data.data);
+    setUploadedVideData(res.res.data.data);
     setLoading(false);    
+  }
+
+  const modifyVideo = async(data:paramT)=>{
+    data.publicId=uploadedVideoData.cloudinaryUpload.public_id;
+    console.log(data);  
+    setLoading(true);
+    const res = await apiHandler('/modify/video-transformation','post',{data})
+    if(!res.success){
+      setLoading(false);
+      toast.error(res.message);
+      return;
+    }
+    setLoading(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setModifiedVideData((res as any).res.data.data);
+    toast('Successfully modified');
+
   }
 
 
   return (
+    <div className='my-4'>
+    {loading && <Loading/>}
     <div className='mb-8 border p-4 rounded-md w-1/2 mx-auto'>
       <form onSubmit={videoUploadHandleSubmit(uploadVideo)} className='flex flex-col gap-4'>
         <h2 className="font-bold text-3xl text-center p-3">Upload Video</h2>
@@ -119,6 +161,49 @@ function VideoUpload({}: Props) {
                     <Button>Upload</Button>
         
       </form>
+    </div>
+    <div>
+      {
+        uploadedVideoData && (
+          <div className='flex flex-col justify-center items-center'>
+            <div className='flex gap-2 justify-center'>
+            
+            <div className='border w-1/2 p-4 rounded-md'>
+              <h2 className="font-bold text-3xl text-center p-3">Modifications</h2>
+              <form onSubmit={modificationHandleSubmit(modifyVideo)} className='flex flex-col gap-2'>
+                 <div className='border rounded-md px-2'>
+                   <h2 className="font-bold text-lg ">Size</h2>
+                 <div className='flex items-center justify-between gap-2'>
+                 <Input type='number' label="Height" {...modificationRegister("height")}/>
+                 <Input type='number' label="Width" {...modificationRegister("width")}/>
+                 </div>
+                 </div>
+                 <Input label="Background" type='color' {...modificationRegister("backGround")}/>
+                 <div className='border rounded-md px-2'>
+                  <h2 className="font-bold text-lg">Crop</h2>
+                   <div className='flex items-center justify-between gap-2'>
+                  <Input type='number' label="Start Timming (in Sec)" {...modificationRegister("startOffset")}/>
+                  <Input type='number' label="End Timming (in Sec)" {...modificationRegister("endOffset")}/>
+                 </div>
+                  {(modificationWatch('startOffset') || modificationWatch('endOffset') )&& 
+                  <>
+                  <input type="checkbox" {...modificationRegister('boomerang')}/>
+                  <label>Boomerang</label>
+                  </>
+                  }
+                 </div>
+                 <Input label="Effect" {...modificationRegister("effect")}/>
+                 <Button>Apply</Button>
+              </form>
+            </div>
+            <video width="250" height="80"   controls src={uploadedVideoData.cloudinaryUpload.secure_url}/>
+            </div>
+                  {modifiedVideoData && <video width="210" height="20" src={modifiedVideoData} controls/>}
+{/* https://res.cloudinary.com/nzm/video/upload/h_400/e_boomerang/v1/reimage/rozvm61df18km3roiid6?_a=BAMClqWO0 */}
+          </div>
+        )
+      }
+    </div>
     </div>
   )
 }

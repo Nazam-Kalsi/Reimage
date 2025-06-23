@@ -13,6 +13,9 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { set } from "zod";
+
+import { useAppSelector } from '@/store/store';
+
 type Props = {};
 
 type imagesDataT = {
@@ -25,7 +28,8 @@ function ViewAll({}: Props) {
   const [dataType, setDataType] = useState<"image" | "video">("image");
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-
+  const user = useAppSelector((state) => state.userSlice.user);
+  console.log('user :',user);
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -66,7 +70,7 @@ function ViewAll({}: Props) {
       <div className="flex mt-3 mr-8 space-x-3 select-none">
         {["image", "video"].map((x, index) => {
           return (
-            <label className="flex items-center justify-center flex-grow cursor-pointer radio">
+            <label key={index} className="flex items-center justify-center flex-grow cursor-pointer radio">
               <input
                 className="hidden peer"
                 type="radio"
