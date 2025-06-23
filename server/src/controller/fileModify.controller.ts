@@ -50,14 +50,14 @@ export const videoTransformation = handler(async (req,res,next)=>{
         
         if(data.backGround) {
           const background = (data.backGround as string).slice(1).toUpperCase(); 
-          transformation.push({ background:'chocolate' });}
-          
-          if(data.height) transformation.push({ height: Number(data.height) });
-          if(data.width) transformation.push({ width: Number(data.width) });
-          if((data.width || data.height)) transformation.push({ crop: "pad" });
-if(data.startOffset) transformation.push({ start_offset: data.startOffset });
-if(data.endOffset) transformation.push({ end_offset: data.endOffset });
-if(data.boomerang) transformation.push({ effect: 'boomerang' });
+          transformation.push({ background:"chocolate" });
+        }          
+        if(data.height) transformation.push({ height: Number(data.height) });
+        if(data.width) transformation.push({ width: Number(data.width) });
+        if((data.width || data.height)) transformation.push({ crop: "pad" });
+        if(data.startOffset) transformation.push({ start_offset: data.startOffset });
+        if(data.endOffset) transformation.push({ end_offset: data.endOffset });
+        if(data.boomerang) transformation.push({ effect: 'boomerang' });
 
 
 

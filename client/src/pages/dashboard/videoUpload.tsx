@@ -182,8 +182,9 @@ const [modifiedVideoData,setModifiedVideData] = useState<string | null>(null)
                  <div className='border rounded-md px-2'>
                   <h2 className="font-bold text-lg">Crop</h2>
                    <div className='flex items-center justify-between gap-2'>
-                  <Input type='number' label="Start Timming (in Sec)" {...modificationRegister("startOffset")}/>
-                  <Input type='number' label="End Timming (in Sec)" {...modificationRegister("endOffset")}/>
+                  <Input type='number' step={0.1} label="Start Timming (in Sec)" {...modificationRegister("startOffset")}/>
+                  <Input type='number' step={0.1} label="End Timming (in Sec)" {...modificationRegister("endOffset")}/> 
+                 
                  </div>
                   {(modificationWatch('startOffset') || modificationWatch('endOffset') )&& 
                   <>
@@ -198,7 +199,18 @@ const [modifiedVideoData,setModifiedVideData] = useState<string | null>(null)
             </div>
             <video width="250" height="80"   controls src={uploadedVideoData.cloudinaryUpload.secure_url}/>
             </div>
-                  {modifiedVideoData && <video width="210" height="20" src={modifiedVideoData} controls/>}
+            <div className="p-4 size-96 flex justify-center items-start">
+  {modifiedVideoData && (
+    <video
+      src={modifiedVideoData}
+      controls
+      style={{
+        objectFit: "contain"
+      }}
+    />
+  )}
+</div>
+                   {/* <video width="510" height="120" src={modifiedVideoData} controls  style={{ width: "510px", height: "120px", objectFit: "cover" }} /> */}
 {/* https://res.cloudinary.com/nzm/video/upload/h_400/e_boomerang/v1/reimage/rozvm61df18km3roiid6?_a=BAMClqWO0 */}
           </div>
         )
