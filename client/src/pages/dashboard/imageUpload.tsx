@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { imageUploadSchema } from "@/schema/imageUploadSchema";
 import { z } from "zod";
-import { Input, Loading, Selector } from "@/components/customComponents";
+import { Input, Loading, FormatSelector, Selector } from "@/components/customComponents";
 import { apiHandler } from "@/lib/apiHandler";
 import { toast } from "sonner";
 import {
@@ -380,7 +380,7 @@ function ImageUpload({}: Props) {
                   control={imageTransformControl}
                   defaultValue=""
                   render={({ field }) => (
-                    <Selector
+                    <FormatSelector
                       data={socialMediaImageFormats}
                       value={field.value}
                       onChange={field.onChange}

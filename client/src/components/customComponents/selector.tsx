@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Controller } from "react-hook-form";
 
 type selectorProps = {
   // data:{[key:string]:string},
@@ -28,7 +29,7 @@ type Tdata = {
   };
 };
 
-export const Selector = ({
+export const FormatSelector = ({
   data,
   onChange,
   value,
@@ -49,8 +50,11 @@ export const Selector = ({
                   {Object.entries(formats).map(
                     ([type, format]: [string, Tformat], index: number) => {
                       return (
-                        <SelectItem key={index} value={`${platform}-${type}-${format.size}`}>
-                         {platform}: {type} - {format.size}
+                        <SelectItem
+                          key={index}
+                          value={`${platform}-${type}-${format.size}`}
+                        >
+                          {platform}: {type} - {format.size}
                         </SelectItem>
                       );
                     }
@@ -64,4 +68,37 @@ export const Selector = ({
       </SelectContent>
     </Select>
   );
+};
+
+type selectorT = {
+  control: any;
+  name:string,
+  placeHolder: string;
+  options: any;
+};
+
+export const Selector = ({ control, placeHolder, options,name }: selectorT) => {
+  return(
+  <Controller
+    name={name}
+    control={control}
+    defaultValue=""
+    render={({ field }) => (
+      <Select {...field} onValueChange={field.onChange} value={field.value}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder={placeHolder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((x, index) => {
+            return (
+              <SelectItem key={index} value={x}>
+                {x}
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select>
+    )}
+  />
+)
 };

@@ -1,16 +1,9 @@
 
 import { Button } from "@/components/ui/button";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
-import { Link } from "react-router";
+import { useAppSelector } from "@/store/store";
+import { Link, useNavigate } from "react-router";
 
-type Props = {};
-
-function Home({}: Props) {
+function Home() {
   //   console.log("hello");
   //   const res = await fetch(`${import.meta.env.VITE_API_URL}/test`, {
   //     credentials: "include",
@@ -18,21 +11,15 @@ function Home({}: Props) {
   //   const data = await res.json();
   //   console.log(data);
   // };
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.userSlice.user);
+  if(user){
+    navigate('/dashboard');
+  }
 
 
   return (
     <>
-    
-    <div>
-      {/* <header>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>  */}
-    </div>
     <Link to='/sign-in'>
     <Button>
     sign in
