@@ -66,6 +66,11 @@ function ViewAll({}: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
+      <img
+        src="./src/assets/frame2.png"
+        alt="Image"
+        className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale z-[-9] hidden dark:block"
+      />
       {loading && <Loading />}
       <div className="flex mt-3 mr-8 space-x-3 select-none">
         {["image", "video"].map((x, index) => {

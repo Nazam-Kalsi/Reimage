@@ -276,6 +276,11 @@ function VideoUpload() {
 
   return (
     <div className="my-4">
+      <img
+        src="../src/assets/grad2.jpg"
+        alt="Image"
+        className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.1] hidden dark:block  dark:grayscale z-[-9]"
+      />
       {loading && <Loading />}
       <div className="mb-8 border p-4 rounded-md w-1/2 mx-auto">
         <form

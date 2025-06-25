@@ -6,7 +6,8 @@ import ImageUpload from "./dashboard/imageUpload";
 import DashboardContainer from "./dashboard";
 import ViewAll from "./dashboard/viewAll";
 import VideoUpload from "./dashboard/videoUpload";
+import RemoveBg from "./dashboard/removeBg";
 
 export {
-    Home, SignIn, SignUp, OTPverification,ImageUpload,DashboardContainer,ViewAll,VideoUpload
+    Home, SignIn, SignUp, OTPverification,ImageUpload,DashboardContainer,ViewAll,VideoUpload,RemoveBg
 }

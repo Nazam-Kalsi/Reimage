@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input, Loading } from "@/components/customComponents";
+import { Input, Loading, Noise } from "@/components/customComponents";
 import { Link } from "react-router";
-import {  GalleryVerticalEnd } from "lucide-react";
+import {  GalleryVerticalEnd, LucideDog } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -78,24 +78,27 @@ const navigate = useNavigate();
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="relative hidden bg-muted lg:block">
         <img
-          src="/placeholder.svg"
+          src="./src/assets/grad2.jpg"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
+        {/* <p className="text-4xl relative z-[99] top-[40%] left-[35%] opacity-10">REIMAGE</p> */}
+
       </div>
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="#" className="flex items-center gap-2 font-medium">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <GalleryVerticalEnd className="size-4" />
+              <LucideDog className="size-4" />
             </div>
             Reimage
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
+            <Noise className="opacity-70"/>
           <div className="w-full max-w-xs">
             <form
-              className={cn("flex flex-col gap-6")}
+              className={cn("flex flex-col gap-6 relative")}
               onSubmit={handleSubmit(submit)}
             >
               <div className="flex flex-col items-center gap-2 text-center">

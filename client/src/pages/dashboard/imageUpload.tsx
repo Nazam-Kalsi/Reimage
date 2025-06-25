@@ -341,6 +341,11 @@ function ImageUpload({}: Props) {
     <>
       {loading && <Loading />}
       <div className="flex flex-col items-center justify-center gap-4 w-full min-h-screen">
+        <img
+        src="../src/assets/grad2.jpg"
+        alt="Image"
+        className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale z-[-9] hidden dark:block"
+      />
         <div className="w-1/2">
           <form
             onSubmit={imageUploadHandleSubmit(submit)}

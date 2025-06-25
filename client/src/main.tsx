@@ -8,6 +8,7 @@ import {
   Home,
   ImageUpload,
   OTPverification,
+  RemoveBg,
   SignIn,
   SignUp,
   VideoUpload,
@@ -18,6 +19,7 @@ import { dark } from "@clerk/themes";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import { PrivateRoute } from "./components/customComponents";
+import NotFound from "./pages/notFound.tsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -34,7 +36,8 @@ const router = createBrowserRouter([
       { path: "/sign-in", Component: SignIn },
       { path: "/sign-up", Component: SignUp },
       { path: "/verify", Component: OTPverification },
-      // { path: "/image-upload", Component: ImageUpload },
+      { path: "*", Component: NotFound },
+      
       {
         path: "dashboard",
         element: (
@@ -46,6 +49,7 @@ const router = createBrowserRouter([
           { index: true, Component: ViewAll },
           { path: "upload-image", Component: ImageUpload },
           { path: "upload-video", Component: VideoUpload },
+          { path: "remove-bg", Component: RemoveBg },
         ],
       },
     ],

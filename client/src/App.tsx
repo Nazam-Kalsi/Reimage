@@ -26,7 +26,7 @@ function App() {
   },[])
   return (
     <>
-    <ThemeToggler className='absolute top-5 right-5 z-10'/>
+    
       <Outlet/>
     <Toaster richColors/>
     </>

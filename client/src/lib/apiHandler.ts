@@ -16,7 +16,7 @@ export const apiHandler = async (url: string,method:string, config={}) => {
             return {success:false,message:error.response?.data.message};
         }
         else{
-            return {success:false,message:(error as Error).message};
+            return {success:false,message:(error as Error).message ?? "Nice try Diddy!"};
         }
     }
 }

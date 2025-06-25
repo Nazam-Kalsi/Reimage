@@ -3,15 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Input from "@/components/customComponents/input";
 import { useForm } from "react-hook-form";
-import { LucideEye, LucideEyeOff } from "lucide-react";
+import { LucideDog, LucideEye, LucideEyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { signInSchema } from "@/schema/signIn.schema";
-import { Loading } from "@/components/customComponents";
+import { Loading, Noise } from "@/components/customComponents";
 import { useSignIn } from '@clerk/clerk-react'
-import { useAppSelector } from "@/store/store";
+import { useAppSelector,useAppDispatch } from "@/store/store";
+import { toast } from "sonner";
+import { signIn as storeSignIn } from "@/store/user.slice";
 
 export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -19,6 +21,7 @@ export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn()
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.userSlice.user);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (user) {
@@ -52,11 +55,18 @@ export default function SignIn() {
   
         if (signInAttempt.status === 'complete') {
           await setActive({ session: signInAttempt.createdSessionId })
-          navigate('/');
+          const dataToDispatch = {
+            id:signInAttempt.id,
+          }
+          dispatch(storeSignIn(dataToDispatch));
+          navigate('/dashboard');
+          
         } else {
           console.error(JSON.stringify(signInAttempt, null, 2))
         }
   }catch(err){
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    toast.error((err as any).message)
     console.log("Error while sign-in :",err)
   }finally{
     setLoading(false)
@@ -65,17 +75,26 @@ export default function SignIn() {
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+       <img
+        src={`./src/assets/grad2.jpg`}
+        alt="svg"
+        width={500}
+        height={500}
+        className="absolute object-cover inset-0 size-full opacity-40 z-[-99]"
+      />
             {loading && <Loading/> }
 
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className={cn("flex flex-col gap-2")}>
-          <Card className="overflow-hidden p-0">
+          <Card className="relative overflow-hidden p-0">
+            <LucideDog className="absolute top-2 left-2"/>
             <CardContent className="grid p-0 md:grid-cols-2">
-              <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-4">
+              <form className="p-6 md:p-8 relative" onSubmit={handleSubmit(onSubmit)}>
+                 <Noise className="opacity-10 "/>
+                <div className="flex flex-col gap-4 ">
                   <div className="flex flex-col items-center text-center">
                     <h1 className="text-2xl font-bold">Welcome back</h1>
-                    <p className="text-muted-foreground text-balance">
+                    <p className="text-muted-foreground text-balance">                      
                       Login to your Reimage account
                     </p>
                   </div>
@@ -131,10 +150,11 @@ export default function SignIn() {
               </form>
               <div className="bg-muted relative hidden md:block">
                 <img
-                  src="/placeholder.svg"
+                  src="./src/assets/frame2.png"
                   alt="Image"
                   className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />
+                <p className="text-4xl relative z-[99] top-[40%] left-[35%] opacity-10">REIMAGE</p>
               </div>
             </CardContent>
           </Card>
