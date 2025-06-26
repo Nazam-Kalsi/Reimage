@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { set } from "zod";
 
 import { useAppSelector } from '@/store/store';
+import { download } from "@/lib/download";
 
 type Props = {};
 
@@ -49,20 +50,6 @@ function ViewAll({}: Props) {
       setLoading(false);
     })();
   }, [page, dataType]);
-
-  const download = async (url: string) => {
-    const image = await fetch(url);
-    const nameSplit = url.split("/");
-    const duplicateName = nameSplit.pop();
-    const imageBlog = await image.blob();
-    const imageURL = URL.createObjectURL(imageBlog);
-    const link = document.createElement("a");
-    link.href = imageURL;
-    link.download = "" + duplicateName + "";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">

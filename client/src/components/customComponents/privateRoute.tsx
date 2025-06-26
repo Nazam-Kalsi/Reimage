@@ -14,7 +14,7 @@ function PrivateRoute({children}: Props) {
     if (isLoading) {
         return <Loading/>
     }
-    return user ? children : <Navigate to="/sign-in" />;  
+    return user ? children : <Navigate to="/sign-in" />;    
 }
 
 export default PrivateRoute

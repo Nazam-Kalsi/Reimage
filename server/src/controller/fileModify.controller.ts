@@ -3,7 +3,7 @@ import { handler } from "../utils/handler";
 import { ApiErr } from "../utils/apiErr";
 import { NextFunction, Request, Response } from "express";
 import cloudinary from "cloudinary";
-import { cloudinaryConfig } from "../utils/cloudinaryUpload";
+import { cloudinaryConfig, cloudinaryUpload } from "../utils/cloudinaryUpload";
 
 export const imageTransformation = handler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -114,3 +114,21 @@ export const videoTransformation = handler(async (req, res, next) => {
     .json(ApiRes(200, "Video modified successfully.", modifiedVideo));
   return res.status(200).json(ApiRes(200, "Video modified successfully."));
 });
+
+export const removeBg = handler(async (req, res, next) => {
+  const file = req.file;
+  if (!file) return next(new ApiErr(400, "Please upload a file."));
+
+  const uploadToCloudinary = await cloudinaryUpload(file.path, 'image');
+  if (!uploadToCloudinary)
+    return next(new ApiErr(500, "Error uploading to cloudinary."));
+
+  const removeBg = await cloudinary.v2.url(uploadToCloudinary.public_id,{effect: "background_removal:fineedges_y"})
+  console.log(removeBg);
+
+  return res.status(200).json(ApiRes(200, "Background removed successfully.", removeBg));
+
+
+
+
+})

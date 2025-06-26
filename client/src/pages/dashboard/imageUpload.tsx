@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectGroup } from "@radix-ui/react-select";
+import { Download } from "lucide-react";
+import { download } from "@/lib/download";
 
 type Props = {};
 
@@ -191,6 +193,7 @@ function ImageUpload({}: Props) {
     register: imageUploadRegister,
     handleSubmit: imageUploadHandleSubmit,
     formState: { errors: imageUploadErrors },
+    watch:imageUploadWatch
   } = useForm<z.infer<typeof imageUploadSchema>>({
     defaultValues: {
       file: undefined,
@@ -352,12 +355,37 @@ function ImageUpload({}: Props) {
             className="flex flex-col gap-4 w-full  border p-4 rounded-lg"
           >
             <h2 className="font-bold text-3xl text-center p-3">Upload Image</h2>
-            <Input
+            <div className="h-fit flex items-center w-full overflow-hidden justify-center">
+              <label
+                htmlFor="file"
+                className="cursor-pointer w-full dark:bg-[#333] py-8 px-16 rounded-md border border-dashed border-[#666] shadow-[0_0_200px_-50px_rgba(0,0,0,0.5)] text-[#eee]"
+              >
+                <div className="flex flex-col items-center justify-center">
+                  <svg viewBox="0 0 640 512" height="50" className="fill-[#666] mb-2">
+                    <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z" />
+                  </svg>
+                { (imageUploadWatch("file")==undefined  || Object.keys(imageUploadWatch("file")).length==0) &&  <span className="dark:text-white text-black">
+                    Click to upload Image 
+                  </span>}
+                </div>
+                <input id="file" type="file"  className="w-full hidden" {...imageUploadRegister("file")}/>
+                {
+                  (imageUploadWatch("file") && Object.keys(imageUploadWatch("file")).length>0) && (
+                    <p className="text-center">
+                      { (imageUploadWatch("file")[0]?.name as string).slice(0,4)}
+                      { (imageUploadWatch("file")[0]?.name as string).length>=4?"....":""}
+                      { (imageUploadWatch("file")[0]?.name as string).split('.').pop()}
+                    </p>
+                  )
+                }
+              </label>
+            </div>
+            {/* <Input
               type="file"
               label="Upload image"
               error={imageUploadErrors.file?.message as string}
               {...imageUploadRegister("file")}
-            />
+            /> */}
             <Input
               label="Title"
               error={imageUploadErrors.title?.message as string}
@@ -458,24 +486,25 @@ function ImageUpload({}: Props) {
               </div>
               <Button>submit</Button>
             </form>
-            {imageData && !modifiedImage && (
-              <div className="rounded-md overflow-hidden mx-auto">
-                <img src={imageData.cloudinaryUpload.secure_url} alt="imgA" />
+            {!imageData && !modifiedImage && (
+              <div className="relative rounded-md overflow-hidden mx-auto">
+                <img src={imageData.cloudinaryUpload.secure_url || `../src/assets/base.png`} alt="preview image" />
               </div>
             )}
             {modifiedImage && (
               <div
-                className="rounded-md overflow-hidden mx-auto flex justify-center items-center"
+                className="relative rounded-md overflow-hidden mx-auto flex justify-center items-center"
                 style={{
                   width: `${(modifiedImage.width as number) / 3}px`,
                   height: `${(modifiedImage.height as number) / 2}px`,
                 }}
               >
                 <img
-                  src={modifiedImage.url}
-                  className="max-w-full max-h-full object-contain "
-                  alt="imgqq"
+                  src={modifiedImage.url || `../src/assets/base.png`}
+                  className="max-w-full max-h-full object-contain"
+                  alt="modified image"
                 />
+                <Button className="absolute z-[999999] right-3 bottom-3" onClick={()=>download(modifiedImage.url)}><Download /></Button>
               </div>
             )}
           </div>
