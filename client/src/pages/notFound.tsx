@@ -12,7 +12,7 @@ function NotFound() {
 
       <div className="h-[80vh] flex justify-evenly items-center  w-full ">
         <img
-          src={`./src/assets/frame2.png`}
+          src={`../src/assets/frame2.png`}
           alt="svg"
           width={500}
           height={500}
@@ -34,12 +34,12 @@ function NotFound() {
           <rect width="100%" height="100%" filter="url(#noise)" />
         </svg>
         <div className="w-[50%] max-lg:w-[70%] xl:w-[30%] max-sm:w-[95%]">
-          <img src="./src/assets/base.png" alt="bro" />
+          <img src="../src/assets/base.png" alt="bro" />
         </div>
         <div className="flex flex-col items-center">
           <p className="text-3xl font-bold text-center">You lost Bro?</p>
-          <Link to={"/"}>
-            <Button variant="ghost">Go to home <ArrowBigRightDashIcon/></Button>
+          <Link to={"/"} className="relative z-[99] ">
+            <Button variant="link">Go to home <ArrowBigRightDashIcon/></Button>
           </Link>
         </div>
       </div>

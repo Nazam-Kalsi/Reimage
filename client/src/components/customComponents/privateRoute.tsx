@@ -15,6 +15,7 @@ function PrivateRoute({children}: Props) {
         return <Loading/>
     }
     return user ? children : <Navigate to="/sign-in" />;    
+    return children;    
 }
 
 export default PrivateRoute

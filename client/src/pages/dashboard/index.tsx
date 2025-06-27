@@ -25,7 +25,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 
-import { BracketsIcon, ImageIcon, LucideHome, VideotapeIcon } from "lucide-react";
+import { BracketsIcon, ImageIcon, LucideHome, PenLineIcon, VideotapeIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -57,6 +57,11 @@ function DashboardContainer() {
       title: "Remove BG",
       url: "/dashboard/remove-bg",
       icon: () => <BracketsIcon/>,
+    },
+    {
+      title: "Sign It",
+      url: "/dashboard/sign",
+      icon: () => <PenLineIcon/>,
     },
   ];
 

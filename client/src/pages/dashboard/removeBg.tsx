@@ -86,7 +86,7 @@ function RemoveBg() {
                 <Loading/>
                   </>
               }
-              {!animation && (
+              {animation && (
                 <div className="absolute w-full h-full flex items-center justify-center animate-pulse bg-gray-900 rounded-lg p-6 text-white">
                   Let him cook, vro😎
                 </div>

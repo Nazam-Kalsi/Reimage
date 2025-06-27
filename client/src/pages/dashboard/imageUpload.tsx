@@ -4,7 +4,12 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { imageUploadSchema } from "@/schema/imageUploadSchema";
 import { z } from "zod";
-import { Input, Loading, FormatSelector, Selector } from "@/components/customComponents";
+import {
+  Input,
+  Loading,
+  FormatSelector,
+  Selector,
+} from "@/components/customComponents";
 import { apiHandler } from "@/lib/apiHandler";
 import { toast } from "sonner";
 import {
@@ -139,17 +144,17 @@ const filterData = {
 };
 
 const radiusData = [
-  {key:'10%',value:10},
-  {key:'20%',value:20},
-  {key:'30%',value:30},
-  {key:'40%',value:40},
-  {key:'50%',value:50},
-  {key:'60%',value:60},
-  {key:'70%',value:70},
-  {key:'80%',value:80},
-  {key:'90%',value:90},
-  {key:'100%',value:'full'},
-  ];
+  { key: "10%", value: 10 },
+  { key: "20%", value: 20 },
+  { key: "30%", value: 30 },
+  { key: "40%", value: 40 },
+  { key: "50%", value: 50 },
+  { key: "60%", value: 60 },
+  { key: "70%", value: 70 },
+  { key: "80%", value: 80 },
+  { key: "90%", value: 90 },
+  { key: "100%", value: "full" },
+];
 
 function ImageUpload({}: Props) {
   const [imageData, setImageData] = useState<ImageDataT | undefined>({
@@ -186,14 +191,16 @@ function ImageUpload({}: Props) {
     },
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const [modifiedImage, setModifiedImage] = useState<modifiedImageT | undefined>(undefined);
+  const [modifiedImage, setModifiedImage] = useState<
+    modifiedImageT | undefined
+  >(undefined);
   const [format, setFormat] = useState<string>("");
 
   const {
     register: imageUploadRegister,
     handleSubmit: imageUploadHandleSubmit,
     formState: { errors: imageUploadErrors },
-    watch:imageUploadWatch
+    watch: imageUploadWatch,
   } = useForm<z.infer<typeof imageUploadSchema>>({
     defaultValues: {
       file: undefined,
@@ -243,53 +250,54 @@ function ImageUpload({}: Props) {
 
   const transform = async (data: any) => {
     console.log(data);
-    let dataToSend: Record<string, any> = {public_id: imageData?.cloudinaryUpload?.public_id}; 
-    let height:number | null = null;
-    let width:number | null = null;
+    let dataToSend: Record<string, any> = {
+      public_id: imageData?.cloudinaryUpload?.public_id,
+    };
+    let height: number | null = null;
+    let width: number | null = null;
     // setLoading(true);
-    if(data.format != ""){      
+    if (data.format != "") {
       const heightWidth = data.format.split("-")[2];
-       height = Number(heightWidth.split("x")[1]);
-       width = Number(heightWidth.split("x")[0]);
+      height = Number(heightWidth.split("x")[1]);
+      width = Number(heightWidth.split("x")[0]);
       setModifiedImage((prev) => {
-          if(prev)return { ...prev, height, width };
-            else return { url:"", height, width };            
-            });
-
-            dataToSend.height=height;
-            dataToSend.width=width;
-      }
-
-      if(data.filter != ""){
-        dataToSend.filter = data.filter;
-      }
-      
-      if(data.radius != ""){
-        dataToSend.radius = Number(data.radius);
-      }
-      
-      console.log(dataToSend);
-      const res = await apiHandler("/modify/image-transformation", "post", {
-        data:dataToSend,
+        if (prev) return { ...prev, height, width };
+        else return { url: "", height, width };
       });
 
-      if (!res.success) {
-        console.log(res.message);
-        toast.error(res.message);
-        setLoading(false);
-        return;
-      }
+      dataToSend.height = height;
+      dataToSend.width = width;
+    }
 
-      console.log(res);
-      setModifiedImage((prev) => {
-        if(prev){
-          return { ...prev, url: res.res?.data.data };
-        }
-      else{
-        return { height:0,width:0, url: res.res?.data.data };
-      }
-      });
+    if (data.filter != "") {
+      dataToSend.filter = data.filter;
+    }
+
+    if (data.radius != "") {
+      dataToSend.radius = Number(data.radius);
+    }
+
+    console.log(dataToSend);
+    const res = await apiHandler("/modify/image-transformation", "post", {
+      data: dataToSend,
+    });
+
+    if (!res.success) {
+      console.log(res.message);
+      toast.error(res.message);
       setLoading(false);
+      return;
+    }
+
+    console.log(res);
+    setModifiedImage((prev) => {
+      if (prev) {
+        return { ...prev, url: res.res?.data.data };
+      } else {
+        return { height: 0, width: 0, url: res.res?.data.data };
+      }
+    });
+    setLoading(false);
   };
   console.log(modifiedImage);
 
@@ -345,10 +353,10 @@ function ImageUpload({}: Props) {
       {loading && <Loading />}
       <div className="flex flex-col items-center justify-center gap-4 w-full min-h-screen">
         <img
-        src="../src/assets/grad2.jpg"
-        alt="Image"
-        className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale z-[-9] hidden dark:block"
-      />
+          src="../src/assets/grad2.jpg"
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale z-[-9] hidden dark:block"
+        />
         <div className="w-1/2">
           <form
             onSubmit={imageUploadHandleSubmit(submit)}
@@ -361,23 +369,41 @@ function ImageUpload({}: Props) {
                 className="cursor-pointer w-full dark:bg-[#333] py-8 px-16 rounded-md border border-dashed border-[#666] shadow-[0_0_200px_-50px_rgba(0,0,0,0.5)] text-[#eee]"
               >
                 <div className="flex flex-col items-center justify-center">
-                  <svg viewBox="0 0 640 512" height="50" className="fill-[#666] mb-2">
+                  <svg
+                    viewBox="0 0 640 512"
+                    height="50"
+                    className="fill-[#666] mb-2"
+                  >
                     <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z" />
                   </svg>
-                { (imageUploadWatch("file")==undefined  || Object.keys(imageUploadWatch("file")).length==0) &&  <span className="dark:text-white text-black">
-                    Click to upload Image 
-                  </span>}
+                  {(imageUploadWatch("file") == undefined ||
+                    Object.keys(imageUploadWatch("file")).length == 0) && (
+                    <span className="dark:text-white text-black">
+                      Click to upload Image
+                    </span>
+                  )}
                 </div>
-                <input id="file" type="file"  className="w-full hidden" {...imageUploadRegister("file")}/>
-                {
-                  (imageUploadWatch("file") && Object.keys(imageUploadWatch("file")).length>0) && (
+                <input
+                  id="file"
+                  type="file"
+                  className="w-full hidden"
+                  {...imageUploadRegister("file")}
+                />
+                {imageUploadWatch("file") &&
+                  Object.keys(imageUploadWatch("file")).length > 0 && (
                     <p className="text-center">
-                      { (imageUploadWatch("file")[0]?.name as string).slice(0,4)}
-                      { (imageUploadWatch("file")[0]?.name as string).length>=4?"....":""}
-                      { (imageUploadWatch("file")[0]?.name as string).split('.').pop()}
+                      {(imageUploadWatch("file")[0]?.name as string).slice(
+                        0,
+                        4
+                      )}
+                      {(imageUploadWatch("file")[0]?.name as string).length >= 4
+                        ? "...."
+                        : ""}
+                      {(imageUploadWatch("file")[0]?.name as string)
+                        .split(".")
+                        .pop()}
                     </p>
-                  )
-                }
+                  )}
               </label>
             </div>
             {/* <Input
@@ -430,28 +456,43 @@ function ImageUpload({}: Props) {
                     control={imageTransformControl}
                     defaultValue=""
                     render={({ field }) => (
-                      <Select {...field} onValueChange={field.onChange} value={field.value}>
+                      <Select
+                        {...field}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select filter" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.entries(filterData).map(([title, filter],index) => {
-                            return (
-                              <div key={index}>
-                                <SelectGroup>
-                                  <SelectLabel>{title}</SelectLabel>
-                                  {filter.map((item: string,index:number) => {
-                                    return (
-                                      <SelectItem key={index} value={title=='art'?`art:${item}`:item}>
-                                        {item}
-                                      </SelectItem>
-                                    );
-                                  })}
-                                </SelectGroup>
-                                <SelectSeparator />
-                              </div>
-                            );
-                          })}
+                          {Object.entries(filterData).map(
+                            ([title, filter], index) => {
+                              return (
+                                <div key={index}>
+                                  <SelectGroup>
+                                    <SelectLabel>{title}</SelectLabel>
+                                    {filter.map(
+                                      (item: string, index: number) => {
+                                        return (
+                                          <SelectItem
+                                            key={index}
+                                            value={
+                                              title == "art"
+                                                ? `art:${item}`
+                                                : item
+                                            }
+                                          >
+                                            {item}
+                                          </SelectItem>
+                                        );
+                                      }
+                                    )}
+                                  </SelectGroup>
+                                  <SelectSeparator />
+                                </div>
+                              );
+                            }
+                          )}
                         </SelectContent>
                       </Select>
                     )}
@@ -464,20 +505,23 @@ function ImageUpload({}: Props) {
                     control={imageTransformControl}
                     defaultValue=""
                     render={({ field }) => (
-                      <Select {...field} onValueChange={field.onChange} value={field.value}>
+                      <Select
+                        {...field}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select radius" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                        <SelectLabel>Radius</SelectLabel>
-                          {
-                            radiusData.map((x,index)=>(
-                              <SelectItem key={index} value={(x.value as string)}>{x.key}</SelectItem>                              
-                            ))
-                          }
+                            <SelectLabel>Radius</SelectLabel>
+                            {radiusData.map((x, index) => (
+                              <SelectItem key={index} value={x.value as string}>
+                                {x.key}
+                              </SelectItem>
+                            ))}
                           </SelectGroup>
-                          
                         </SelectContent>
                       </Select>
                     )}
@@ -488,7 +532,13 @@ function ImageUpload({}: Props) {
             </form>
             {!imageData && !modifiedImage && (
               <div className="relative rounded-md overflow-hidden mx-auto">
-                <img src={imageData.cloudinaryUpload.secure_url || `../src/assets/base.png`} alt="preview image" />
+                <img
+                  src={
+                    imageData.cloudinaryUpload.secure_url ||
+                    `../src/assets/base.png`
+                  }
+                  alt="preview image"
+                />
               </div>
             )}
             {modifiedImage && (
@@ -504,7 +554,12 @@ function ImageUpload({}: Props) {
                   className="max-w-full max-h-full object-contain"
                   alt="modified image"
                 />
-                <Button className="absolute z-[999999] right-3 bottom-3" onClick={()=>download(modifiedImage.url)}><Download /></Button>
+                <Button
+                  className="absolute z-[999999] right-3 bottom-3"
+                  onClick={() => download(modifiedImage.url)}
+                >
+                  <Download />
+                </Button>
               </div>
             )}
           </div>
